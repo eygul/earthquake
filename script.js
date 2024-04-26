@@ -112,6 +112,13 @@ function getEarliestDateTime(earthquakes) {
     }
   }
 
+  function hideLoadingOverlay() {
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    if (loadingOverlay) {
+      loadingOverlay.style.display = 'none';
+    }
+  }
+
 // Main function to initialize the map and fetch earthquake data
 async function main() {
   const map = initMap();
@@ -120,6 +127,7 @@ async function main() {
     addEarthquakeMarkers(map, earthquakeData);
     displayEarthquakes(earthquakeData);
     updateTotalCount(earthquakeData);
+    hideLoadingOverlay();
   }
 }
 
