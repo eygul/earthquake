@@ -1,0 +1,124 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Global styles */
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1f1f1f, #000);
+    color: #fff;
+    line-height: 1.6;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  header, footer {
+    background: linear-gradient(135deg, #242424, #1a1a1a);
+    color: #fff;
+    padding: 20px 0;
+  }
+  
+  header h1 {
+    font-size: 2.5rem;
+  }
+  
+  header p {
+    font-size: 1.1rem;
+    font-style: italic;
+  }
+  
+  main {
+    padding: 20px 0;
+  }
+  
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: #fff;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+  
+  /* Map section */
+  .map-section {
+    background: linear-gradient(135deg, #2c2c2c, #212121);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    margin-bottom: 30px;
+  }
+  
+  .map {
+    height: 400px;
+    border-radius: 10px;
+  }
+  
+  /* Latest earthquakes section */
+  .latest-earthquakes {
+    background: linear-gradient(135deg, #2c2c2c, #212121);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+  }
+  
+  .quake-list {
+    margin-top: 15px;
+  }
+  
+  .quake-card {
+    background: linear-gradient(135deg, #343434, #2c2c2c);
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+  }
+  
+  .quake-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .quake-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    color: #fff;
+  }
+  
+  .quake-card p {
+    font-size: 1rem;
+    margin-bottom: 3px;
+    color: #ccc;
+  }
+  
+  /* Footer */
+  footer {
+    text-align: center;
+    font-size: 0.9rem;
+    background: linear-gradient(135deg, #242424, #1a1a1a);
+    padding: 15px 0;
+  }
+  
+  footer p {
+    color: #fff;
+  }
+  
+  a{
+    text-decoration:none;
+    color:white
+  }
+  a:hover{
+    color:yellow;
+  }
+
+  #yel{
+    color:yellow;
+  }

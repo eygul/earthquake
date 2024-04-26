@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turkish Earthquake Dashbaord</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Turkish Earthquake Dashboard</h1>
+      <p>Real-time visualization and information about earthquakes</p>
+    </div>
+  </header>
+  <main>
+    <section class="map-section">
+      <div class="container">
+        <h2>Earthquake Map</h2>
+        <div id="map" class="map mb-3"></div>
+      </div>
+    </section>
+    <section class="latest-earthquakes">
+      <div class="container">
+        <h2>Latest Earthquakes</h2>
+        <p>Total Earthquakes in the Database: <span id="totalSinceEarliest">Loading...</span></p>
+        <p>Earliest Earthquake DateTime: <span id="earliestDateTime">Loading...</span></p>
+        <div class="quake-list" id="quakeList"></div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p>Important: Both this website and the API it uses are non-profit and hobby-purposed. All of the information this website (and the API it uses) shows is the property of the Bogazici University. Please use the information in this website and the API it uses according to the policy of Bogazici at: <a href="http://www.koeri.boun.edu.tr/scripts/lst9.asp">http://www.koeri.boun.edu.tr/scripts/lst9.asp</a></p>
+      <p>Veri Kaynağı: Boğaziçi Üniversitesi Kandilli Rasathanesi ve Deprem Araştırma Enstitüsü Bölgesel Deprem-Tsunami İzleme Ve Değerlendirme Merkezi.</p>
+      <p id="yel">&copy; 2024 <a style='color:yellow;' href="http://www.erenyilmazgul.com/">Eren Gul</a>. All rights reserved.</p>
+    </div>
+  </footer>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
