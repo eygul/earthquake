@@ -36,28 +36,42 @@ function addEarthquakeMarkers(map, earthquakes) {
   });
 }
 
+// Function to sort earthquakes by date and time
+function sortEarthquakesByDateTime(earthquakes) {
+  return earthquakes.sort((a, b) => {
+    const dateTimeA = new Date(a.date.replace(/\./g, '-') + 'T' + a.time);
+    const dateTimeB = new Date(b.date.replace(/\./g, '-') + 'T' + b.time);
+    return dateTimeB - dateTimeA; // Sort in descending order (latest first)
+  });
+}
+
 // Function to display earthquake data
 function displayEarthquakes(earthquakes) {
   const quakeList = document.getElementById('quakeList');
   quakeList.innerHTML = ''; // Clear previous data
-  const lastFiveEarthquakes = earthquakes.slice(-5).reverse(); // Get the last five earthquakes and reverse their order
+  
+  // Sort earthquakes by date and time
+  const sortedEarthquakes = sortEarthquakesByDateTime(earthquakes);
+  
+  // Display the last five earthquakes
+  const lastFiveEarthquakes = sortedEarthquakes.slice(0, 5);
   lastFiveEarthquakes.forEach(earthquake => {
-    const { location, date, time, ml } = earthquake; // Extract magnitude from 'ml' field
-    const magnitude = ml !== undefined ? ml : 'N/A'; // Check if 'ml' field exists
+    const { location, date, time, ml } = earthquake;
+    const magnitude = ml !== undefined ? ml : 'N/A';
     const quakeItem = document.createElement('div');
     quakeItem.classList.add('quake-card');
     quakeItem.innerHTML = `
       <h3>${location}</h3>
       <p>Date: ${date}</p>
       <p>Time: ${time}</p>
-      <p>Magnitude: ${magnitude}</p> <!-- Display magnitude -->
+      <p>Magnitude: ${magnitude}</p>
     `;
     quakeList.appendChild(quakeItem);
   });
 
   // Calculate and display total earthquakes since earliest date and time
-  const earliestDateTime = getEarliestDateTime(earthquakes);
-  const totalSinceEarliest = earthquakes.length;
+  const earliestDateTime = getEarliestDateTime(sortedEarthquakes);
+  const totalSinceEarliest = sortedEarthquakes.length;
   document.getElementById('totalSinceEarliest').textContent = totalSinceEarliest;
   document.getElementById('earliestDateTime').textContent = earliestDateTime;
 }
