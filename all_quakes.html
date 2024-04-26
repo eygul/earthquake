@@ -3,47 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Turkish Earthquake Dashbaord</title>
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <!-- Custom CSS -->
+  <title>All Earthquakes - Turkish Earthquake Dashboard</title>
+  <!-- Link to the existing CSS file -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
     <div class="container">
-      <div class="loading-overlay">
-        <div class="loading-spinner"></div>
-      </div>
-      <button class="navbar-toggle" id="navbarToggleBtn">
+        <button class="navbar-toggle" id="navbarToggleBtn">
         <span class="toggle-icon"></span>
         <span class="toggle-icon"></span>
         <span class="toggle-icon"></span>
-      </button>
+        </button>
 
-      <div class="navbar-links" id="navbarLinks">
+        <div class="navbar-links" id="navbarLinks">
         <a href="/index.html">Home</a>
         <a href="/all_quakes.html">All Earthquakes</a>
         <a href="https://ereny.pythonanywhere.com/quakes/">API</a>
         <a href="#" id="importantLink">Important</a>
-      </div>
-      <h1>Turkish Earthquake Dashboard</h1>
-      <p>Real-time visualization and information about earthquakes</p>
+          </div>
+      <h1>All Earthquakes</h1>
+      <p>Chronological list of all earthquakes in the database</p>
     </div>
   </header>
   <main>
-    <section class="map-section">
+    <section class="all-earthquakes">
       <div class="container">
-        <h2>Earthquake Map</h2>
-        <div id="map" class="map mb-3"></div>
-      </div>
-    </section>
-    <section class="latest-earthquakes">
-      <div class="container">
-        <h2>Latest Earthquakes</h2>
-        <p>Total Earthquakes in the Database: <span id="totalSinceEarliest">Loading...</span></p>
-        <p>Earliest Earthquake DateTime: <span id="earliestDateTime">Loading...</span></p>
-        <div class="quake-list" id="quakeList"></div>
+        <h2>All Earthquakes</h2>
+        <!-- Container for displaying all earthquakes -->
+        <div class="quake-list" id="allQuakeList"></div>
       </div>
     </section>
   </main>
@@ -54,7 +42,7 @@
       <p id="yel">&copy; 2024 <a style='color:yellow;' href="http://www.erenyilmazgul.com/">Eren Gul</a>. All rights reserved.</p>
     </div>
   </footer>
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- Link to the existing JavaScript file -->
   <script src="script.js"></script>
 </body>
 </html>

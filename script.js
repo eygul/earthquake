@@ -118,6 +118,53 @@ function getEarliestDateTime(earthquakes) {
       loadingOverlay.style.display = 'none';
     }
   }
+// Function to fetch all earthquake data
+async function fetchAllEarthquakeData() {
+  try {
+    const response = await fetch(API_URL);
+    if (!response.ok) {
+      throw new Error('Failed to fetch earthquake data');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching earthquake data:', error);
+    return null;
+  }
+}
+
+// Function to display all earthquakes chronologically
+function displayAllEarthquakes(earthquakes) {
+  const allQuakeList = document.getElementById('allQuakeList');
+  allQuakeList.innerHTML = ''; // Clear previous data
+
+  // Sort earthquakes chronologically
+  const sortedEarthquakes = sortEarthquakesByDateTime(earthquakes);
+
+  // Display all earthquakes
+  sortedEarthquakes.forEach(earthquake => {
+    const { location, date, time, ml } = earthquake;
+    const magnitude = ml !== undefined ? ml : 'N/A';
+    const quakeItem = document.createElement('div');
+    quakeItem.classList.add('quake-card');
+    quakeItem.innerHTML = `
+      <h3>${location}</h3>
+      <p>Date: ${date}</p>
+      <p>Time: ${time}</p>
+      <p>Magnitude: ${magnitude}</p>
+    `;
+    allQuakeList.appendChild(quakeItem);
+  });
+}
+
+// Function to load all earthquakes on the All Earthquakes page
+async function loadAllEarthquakes() {
+  const allEarthquakeData = await fetchAllEarthquakeData();
+  if (allEarthquakeData) {
+    displayAllEarthquakes(allEarthquakeData);
+  }
+}
+window.onload = loadAllEarthquakes;
 
 // Main function to initialize the map and fetch earthquake data
 async function main() {
@@ -130,6 +177,24 @@ async function main() {
     hideLoadingOverlay();
   }
 }
+// Function to toggle the navbar
+function toggleNavbar() {
+  const navbarLinks = document.getElementById('navbarLinks');
+  navbarLinks.classList.toggle('active');
+}
 
-// Call the main function to start the process
+// Add event listener to the toggle button
+const navbarToggleBtn = document.getElementById('navbarToggleBtn');
+navbarToggleBtn.addEventListener('click', toggleNavbar);
+
+// Function to scroll to the footer when the "Important" link is clicked
+function scrollToFooter() {
+  const footer = document.getElementById('footer');
+  footer.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Add event listener to the "Important" link
+const importantLink = document.getElementById('importantLink');
+importantLink.addEventListener('click', scrollToFooter);
+
 main();
