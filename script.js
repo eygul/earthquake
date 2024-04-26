@@ -38,28 +38,28 @@ function addEarthquakeMarkers(map, earthquakes) {
 
 // Function to display earthquake data
 function displayEarthquakes(earthquakes) {
-    const quakeList = document.getElementById('quakeList');
-    quakeList.innerHTML = ''; // Clear previous data
-    const lastFiveEarthquakes = earthquakes.slice(-5); // Get the last five earthquakes
-    lastFiveEarthquakes.forEach(earthquake => {
-      const { location, date, time, ml } = earthquake; // Extract magnitude from 'ml' field
-      const magnitude = ml !== undefined ? ml : 'N/A'; // Check if 'ml' field exists
-      const quakeItem = document.createElement('div');
-      quakeItem.classList.add('quake-card');
-      quakeItem.innerHTML = `
-        <h3>${location}</h3>
-        <p>Date: ${date}</p>
-        <p>Time: ${time}</p>
-        <p>Magnitude: ${magnitude}</p> <!-- Display magnitude -->
-      `;
-      quakeList.appendChild(quakeItem);
-    });
-  
-    // Calculate and display total earthquakes since earliest date and time
-    const earliestDateTime = getEarliestDateTime(earthquakes);
-    const totalSinceEarliest = earthquakes.length;
-    document.getElementById('totalSinceEarliest').textContent = totalSinceEarliest;
-    document.getElementById('earliestDateTime').textContent = earliestDateTime;
+  const quakeList = document.getElementById('quakeList');
+  quakeList.innerHTML = ''; // Clear previous data
+  const lastFiveEarthquakes = earthquakes.slice(-5).reverse(); // Get the last five earthquakes and reverse their order
+  lastFiveEarthquakes.forEach(earthquake => {
+    const { location, date, time, ml } = earthquake; // Extract magnitude from 'ml' field
+    const magnitude = ml !== undefined ? ml : 'N/A'; // Check if 'ml' field exists
+    const quakeItem = document.createElement('div');
+    quakeItem.classList.add('quake-card');
+    quakeItem.innerHTML = `
+      <h3>${location}</h3>
+      <p>Date: ${date}</p>
+      <p>Time: ${time}</p>
+      <p>Magnitude: ${magnitude}</p> <!-- Display magnitude -->
+    `;
+    quakeList.appendChild(quakeItem);
+  });
+
+  // Calculate and display total earthquakes since earliest date and time
+  const earliestDateTime = getEarliestDateTime(earthquakes);
+  const totalSinceEarliest = earthquakes.length;
+  document.getElementById('totalSinceEarliest').textContent = totalSinceEarliest;
+  document.getElementById('earliestDateTime').textContent = earliestDateTime;
 }
 
   
