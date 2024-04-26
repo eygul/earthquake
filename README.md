@@ -1,4 +1,4 @@
-#Turkish Earthquake Dashboard
+# Turkish Earthquake Dashboard
 
 A frontend client for the Turkey earthquake API I developed using Django Rest Framework:
 https://github.com/eygul/turkey_earthquake_api  
