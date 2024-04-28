@@ -18,7 +18,7 @@ async function fetchEarthquakeData() {
 
 // Function to initialize the map
 function initMap() {
-  const map = L.map('map').setView([0, 0], 2); // Default center and zoom level
+  const map = L.map('map').setView([39, 34], 6); // Set initial view slightly east of Turkey
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
@@ -28,13 +28,54 @@ function initMap() {
 // Function to add earthquake markers to the map
 function addEarthquakeMarkers(map, earthquakes) {
   earthquakes.forEach(earthquake => {
-    const { latitude, longitude, location } = earthquake;
-    L.marker([parseFloat(latitude), parseFloat(longitude)])
-      .addTo(map)
-      .bindPopup(`<b>Location:</b> ${location}<br/><b>Coordinates:</b> ${latitude}, ${longitude}`)
-      .openPopup();
+    const { latitude, longitude, location, ml } = earthquake;
+    
+    // Determine marker color based on earthquake magnitude
+    let color;
+    if (ml < 2) {
+      color = 'green';
+    } else if (ml >= 2 && ml < 4) {
+      color = 'blue';
+    } else if (ml >= 4 && ml < 6) {
+      color = 'orange';
+    } else {
+      color = 'red';
+    }
+
+    // Create circle marker with appropriate color and size
+    const circle = L.circleMarker([parseFloat(latitude), parseFloat(longitude)], {
+      radius: 5, // Adjust the radius as needed
+      color: color,
+      fillColor: color,
+      fillOpacity: 0.8
+    }).addTo(map);
+
+    circle.bindPopup(`<b>Location:</b> ${location}<br/><b>Coordinates:</b> ${latitude}, ${longitude}<br/><b>Magnitude:</b> ${ml}`);
   });
+
+  // Add legend
+  const legend = L.control({position: 'bottomright'});
+  legend.onAdd = function (map) {
+    const div = L.DomUtil.create('div', 'info legend');
+    const labels = [];
+
+    // Add labels with color codes and magnitude numbers
+    labels.push(
+      '<div style="background-color: rgba(0, 128, 0, 0.8); width: 20px; height: 20px; display: inline-block;"></div> 0-2',
+      '<div style="background-color: rgba(0, 0, 255, 0.8); width: 20px; height: 20px; display: inline-block;"></div> 2-4',
+      '<div style="background-color: rgba(255, 165, 0, 0.8); width: 20px; height: 20px; display: inline-block;"></div> 4-6',
+      '<div style="background-color: rgba(255, 0, 0, 0.8); width: 20px; height: 20px; display: inline-block;"></div> 6+'
+    );
+
+    div.innerHTML = labels.join('<br>');
+    div.style.backgroundColor = 'rgba(255, 255, 255, 0.8)'; // Add background color to legend
+    div.style.padding = '10px'; // Add padding for better readability
+    div.style.color = 'black'; // Ensure text is visible
+    return div;
+  };
+  legend.addTo(map);
 }
+
 
 // Function to sort earthquakes by date and time
 function sortEarthquakesByDateTime(earthquakes) {
