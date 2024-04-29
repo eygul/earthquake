@@ -178,7 +178,7 @@ async function fetchAllEarthquakeData() {
 
 // Function to display all earthquakes chronologically
 function displayAllEarthquakes(earthquakes) {
-  const allQuakeList = document.getElementById('quakeList');
+  const allQuakeList = document.querySelector('.quake-list');
   allQuakeList.innerHTML = ''; // Clear previous data
 
   // Sort earthquakes chronologically
@@ -204,8 +204,7 @@ function displayAllEarthquakes(earthquakes) {
 async function loadAllEarthquakes() {
   const allEarthquakeData = await fetchAllEarthquakeData();
   if (allEarthquakeData) {
-    displayLastFiveEarthquakes(allEarthquakeData); // Display only the last five earthquakes
-    displayEarthquakeStats(allEarthquakeData);
+    displayAllEarthquakes(allEarthquakeData); // Display all earthquakes
     hideLoadingOverlay();
   }
 }
