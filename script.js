@@ -264,7 +264,7 @@ function renderMagnitudeChart(earthquakes) {
       plugins: {
         title: {
           display: true,
-          text: 'Magnitude Distribution Chart', // Title text
+          text: 'Earthquakes by Magnitude', // Title text
           font: {
             size: 20 // Title font size
           }
