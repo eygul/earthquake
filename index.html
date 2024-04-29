@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <!-- Custom CSS -->
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <header>
@@ -38,6 +39,34 @@
         <div id="map" class="map mb-3"></div>
       </div>
     </section>
+    <section class="chart-section">
+      <div class="container">
+        <h2>Earthquake Statistics</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h3>Today</h3>
+            <p id="todayCount">Loading...</p>
+          </div>
+          <div class="stat-card">
+            <h3>This Week</h3>
+            <p id="weekCount">Loading...</p>
+          </div>
+          <div class="stat-card">
+            <h3>This Month</h3>
+            <p id="monthCount">Loading...</p>
+          </div>
+          <div class="stat-card">
+            <h3>Total in Database</h3>
+            <p id="totalCount">Loading...</p>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div id="magnitudeChart" class="chart-container">
+          <canvas id="magnitudeCanvas"></canvas>
+        </div>
+      </div>
+    </section>
     <section class="latest-earthquakes">
       <div class="container">
         <h2>Latest Earthquakes</h2>
@@ -55,6 +84,7 @@
     </div>
   </footer>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

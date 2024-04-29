@@ -116,6 +116,7 @@ function displayEarthquakes(earthquakes) {
   document.getElementById('totalSinceEarliest').textContent = totalSinceEarliest;
   document.getElementById('earliestDateTime').textContent = earliestDateTime;
 }
+  
 
   
 
@@ -160,6 +161,7 @@ function getEarliestDateTime(earthquakes) {
     }
   }
 // Function to fetch all earthquake data
+// Function to fetch all earthquake data
 async function fetchAllEarthquakeData() {
   try {
     const response = await fetch(API_URL);
@@ -176,7 +178,7 @@ async function fetchAllEarthquakeData() {
 
 // Function to display all earthquakes chronologically
 function displayAllEarthquakes(earthquakes) {
-  const allQuakeList = document.getElementById('allQuakeList');
+  const allQuakeList = document.getElementById('quakeList');
   allQuakeList.innerHTML = ''; // Clear previous data
 
   // Sort earthquakes chronologically
@@ -202,10 +204,96 @@ function displayAllEarthquakes(earthquakes) {
 async function loadAllEarthquakes() {
   const allEarthquakeData = await fetchAllEarthquakeData();
   if (allEarthquakeData) {
-    displayAllEarthquakes(allEarthquakeData);
+    displayLastFiveEarthquakes(allEarthquakeData); // Display only the last five earthquakes
+    displayEarthquakeStats(allEarthquakeData);
+    hideLoadingOverlay();
   }
 }
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadAllEarthquakes();
+  main();
+});
+
 window.onload = loadAllEarthquakes;
+
+function renderMagnitudeChart(earthquakes) {
+  const counts = { '<2': 0, '2-4': 0, '4-6': 0, '>=6': 0 };
+
+  earthquakes.forEach(earthquake => {
+    const { ml } = earthquake;
+    if (ml < 2) {
+      counts['<2']++;
+    } else if (ml >= 2 && ml < 4) {
+      counts['2-4']++;
+    } else if (ml >= 4 && ml < 6) {
+      counts['4-6']++;
+    } else {
+      counts['>=6']++;
+    }
+  });
+
+  const ctx = document.getElementById('magnitudeCanvas').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(counts),
+      datasets: [{
+        label: 'Magnitude Distribution',
+        data: Object.values(counts),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.8)',
+          'rgba(54, 162, 235, 0.8)',
+          'rgba(255, 206, 86, 0.8)',
+          'rgba(75, 192, 192, 0.8)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+        ],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      animation: {
+        duration: 2000,
+        easing: 'easeInOutQuint'
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1
+          }
+        }
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: 'Magnitude Distribution Chart', // Title text
+          font: {
+            size: 20 // Title font size
+          }
+        },
+        legend: {
+          display: false // Hide legend
+        },
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.7)', // Tooltip background color
+          displayColors: false, // Hide color boxes in tooltip
+          callbacks: {
+            label: function(context) {
+              return `Count: ${context.parsed.y}`;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
 
 // Main function to initialize the map and fetch earthquake data
 async function main() {
@@ -215,6 +303,7 @@ async function main() {
     addEarthquakeMarkers(map, earthquakeData);
     displayEarthquakes(earthquakeData);
     updateTotalCount(earthquakeData);
+    renderMagnitudeChart(earthquakeData);
     hideLoadingOverlay();
   }
 }
@@ -237,5 +326,98 @@ function scrollToFooter() {
 // Add event listener to the "Important" link
 const importantLink = document.getElementById('importantLink');
 importantLink.addEventListener('click', scrollToFooter);
+document.addEventListener('DOMContentLoaded', main);
+
+// Function to calculate earthquake statistics
+function calculateEarthquakeStats(earthquakes) {
+  const today = new Date();
+  const turkeyTime = today.toLocaleString('en-US', { timeZone: 'Europe/Istanbul' });
+  const startOfToday = new Date(turkeyTime);
+  startOfToday.setHours(0, 0, 0, 0);
+  
+  const yesterday = new Date(turkeyTime);
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(0, 0, 0, 0);
+
+  // Filter earthquakes based on date
+  const todayCount = earthquakes.filter(earthquake => isToday(parseDate(earthquake.date), startOfToday)).length;
+  const weekCount = earthquakes.filter(earthquake => parseDate(earthquake.date) >= getStartOfWeek(today)).length;
+  const monthCount = earthquakes.filter(earthquake => parseDate(earthquake.date) >= getStartOfMonth(today)).length;
+  const totalCount = earthquakes.length;
+
+  return { todayCount, weekCount, monthCount, totalCount };
+}
+
+// Helper function to parse date in format 'YYYY.MM.DD'
+function parseDate(dateString) {
+  const parts = dateString.split('.');
+  return new Date(parts[0], parts[1] - 1, parts[2]);
+}
+
+// Helper function to check if a date is today
+function isToday(date, startOfToday) {
+  return date >= startOfToday;
+}
+
+// Helper function to get the start of the week for a given date
+function getStartOfWeek(date) {
+  const startOfWeek = new Date(date);
+  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+  return new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate());
+}
+
+// Helper function to get the start of the month for a given date
+function getStartOfMonth(date) {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+
+// Function to display earthquake statistics
+function displayEarthquakeStats(earthquakes) {
+  const { todayCount, weekCount, monthCount, totalCount } = calculateEarthquakeStats(earthquakes);
+
+  document.getElementById('todayCount').textContent = todayCount;
+  document.getElementById('weekCount').textContent = weekCount; // Update the week count
+  document.getElementById('monthCount').textContent = monthCount;
+  document.getElementById('totalCount').textContent = totalCount;
+
+  createMagnitudeChart(earthquakes);
+}
+
+// Function to display the last five earthquakes
+function displayLastFiveEarthquakes(earthquakes) {
+  const lastFiveEarthquakes = earthquakes.slice(0, 5);
+  const quakeList = document.getElementById('quakeList');
+  quakeList.innerHTML = ''; // Clear previous data
+  lastFiveEarthquakes.forEach(earthquake => {
+    const { location, date, time, ml } = earthquake;
+    const magnitude = ml !== undefined ? ml : 'N/A';
+    const quakeItem = document.createElement('div');
+    quakeItem.classList.add('quake-card');
+    quakeItem.innerHTML = `
+      <h3>${location}</h3>
+      <p>Date: ${date}</p>
+      <p>Time: ${time}</p>
+      <p>Magnitude: ${magnitude}</p>
+    `;
+    quakeList.appendChild(quakeItem);
+  });
+}
+
+function createMagnitudeChart(earthquakes) {
+  const counts = { '<2': 0, '2-4': 0, '4-6': 0, '>=6': 0 };
+
+  earthquakes.forEach(earthquake => {
+    const { ml } = earthquake;
+    if (ml < 2) {
+      counts['<2']++;
+    } else if (ml >= 2 && ml < 4) {
+      counts['2-4']++;
+    } else if (ml >= 4 && ml < 6) {
+      counts['4-6']++;
+    } else {
+      counts['>=6']++;
+    }
+  });
+}
 
 main();

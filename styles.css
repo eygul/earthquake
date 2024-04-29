@@ -204,3 +204,53 @@
 .navbar-links a:hover {
   background-color: #555;
 }
+
+#magnitudeChart {
+  max-width: 600px;
+  /* margin: 20px auto; */
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Styling for the chart canvas */
+.chart-section {
+  background: linear-gradient(135deg, #2c2c2c, #212121);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  margin-bottom: 30px;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap */
+  align-items: center;
+}
+
+.chart-container {
+  width: 150%;
+  max-width: calc(100% - 400px); /* Adjust maximum width to accommodate space for statistical data */
+  height: 300px; /* Fixed height */
+  margin-bottom: 20px; /* Add some spacing */
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  overflow: hidden; /* Ensure the canvas doesn't overflow */
+  position: relative; /* Required for absolutely positioning the canvas */
+}
+
+
+.stats-grid {
+  width: 100%;
+  max-width: 400px; /* Width of the statistical data */
+  margin-left: auto; /* Align statistical data to the right */
+}
+
+.stat-card {
+  margin-bottom: 15px;
+}
+
+.stat-card h3 {
+  font-size: 1.5rem; /* Increase font size for statistical data */
+  margin-bottom: 5px;
+}
+
+.stat-card p {
+  font-size: 1.2rem; /* Increase font size for statistical data */
+}
