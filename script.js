@@ -12,6 +12,8 @@ async function fetchEarthquakeData() {
     return data;
   } catch (error) {
     console.error('Error fetching earthquake data:', error);
+    // Display error message to the user
+    alert('Failed to fetch earthquake data. Please try again later.');
     return null;
   }
 }
@@ -116,7 +118,6 @@ function displayEarthquakes(earthquakes) {
   document.getElementById('totalSinceEarliest').textContent = totalSinceEarliest;
   document.getElementById('earliestDateTime').textContent = earliestDateTime;
 }
-  
 
   
 
@@ -161,7 +162,6 @@ function getEarliestDateTime(earthquakes) {
     }
   }
 // Function to fetch all earthquake data
-// Function to fetch all earthquake data
 async function fetchAllEarthquakeData() {
   try {
     const response = await fetch(API_URL);
@@ -172,13 +172,14 @@ async function fetchAllEarthquakeData() {
     return data;
   } catch (error) {
     console.error('Error fetching earthquake data:', error);
+    // Display error message to the user
+    alert('Failed to fetch earthquake data. Please try again later.');
     return null;
   }
 }
-
 // Function to display all earthquakes chronologically
 function displayAllEarthquakes(earthquakes) {
-  const allQuakeList = document.querySelector('.quake-list');
+  const allQuakeList = document.getElementById('allQuakeList');
   allQuakeList.innerHTML = ''; // Clear previous data
 
   // Sort earthquakes chronologically
@@ -204,18 +205,10 @@ function displayAllEarthquakes(earthquakes) {
 async function loadAllEarthquakes() {
   const allEarthquakeData = await fetchAllEarthquakeData();
   if (allEarthquakeData) {
-    displayAllEarthquakes(allEarthquakeData); // Display all earthquakes
-    hideLoadingOverlay();
+    displayAllEarthquakes(allEarthquakeData);
   }
 }
-
-document.addEventListener('DOMContentLoaded', async () => {
-  await loadAllEarthquakes();
-  main();
-});
-
 window.onload = loadAllEarthquakes;
-
 function renderMagnitudeChart(earthquakes) {
   const counts = { '<2': 0, '2-4': 0, '4-6': 0, '>=6': 0 };
 
@@ -292,7 +285,50 @@ function renderMagnitudeChart(earthquakes) {
     }
   });
 }
+function calculateEarthquakeCounts(earthquakes) {
+  const turkishTimeOptions = { timeZone: 'Europe/Istanbul' }; // Set timezone to Turkish timezone
 
+  // Get current date and time in Turkish timezone
+  const now = new Date().toLocaleString('en-US', turkishTimeOptions);
+  const today = new Date(now);
+  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const startOfThisWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+  const startOfThisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const startOfThisYear = new Date(today.getFullYear(), 0, 1);
+
+  const todayCount = earthquakes.filter(earthquake => {
+    const earthquakeDate = new Date(earthquake.date.replace(/\./g, '-') + 'T' + earthquake.time);
+    return earthquakeDate >= startOfToday;
+  }).length;
+
+  const thisWeekCount = earthquakes.filter(earthquake => {
+    const earthquakeDate = new Date(earthquake.date.replace(/\./g, '-') + 'T' + earthquake.time);
+    return earthquakeDate >= startOfThisWeek;
+  }).length;
+
+  const thisMonthCount = earthquakes.filter(earthquake => {
+    const earthquakeDate = new Date(earthquake.date.replace(/\./g, '-') + 'T' + earthquake.time);
+    return earthquakeDate >= startOfThisMonth;
+  }).length;
+
+  const thisYearCount = earthquakes.filter(earthquake => {
+    const earthquakeDate = new Date(earthquake.date.replace(/\./g, '-') + 'T' + earthquake.time);
+    return earthquakeDate >= startOfThisYear;
+  }).length;
+
+  const totalCount = earthquakes.length;
+
+  return { todayCount, thisWeekCount, thisMonthCount, thisYearCount, totalCount };
+}
+
+// Function to display earthquake counts
+function displayEarthquakeCounts(counts) {
+  document.getElementById('todayCount').textContent = counts.todayCount;
+  document.getElementById('weekCount').textContent = counts.thisWeekCount;
+  document.getElementById('monthCount').textContent = counts.thisMonthCount;
+  document.getElementById('yearCount').textContent = counts.thisYearCount;
+  document.getElementById('totalCount').textContent = counts.totalCount;
+}
 
 // Main function to initialize the map and fetch earthquake data
 async function main() {
@@ -304,6 +340,9 @@ async function main() {
     updateTotalCount(earthquakeData);
     renderMagnitudeChart(earthquakeData);
     hideLoadingOverlay();
+
+    const counts = calculateEarthquakeCounts(earthquakeData);
+    displayEarthquakeCounts(counts);
   }
 }
 // Function to toggle the navbar
@@ -325,98 +364,5 @@ function scrollToFooter() {
 // Add event listener to the "Important" link
 const importantLink = document.getElementById('importantLink');
 importantLink.addEventListener('click', scrollToFooter);
-document.addEventListener('DOMContentLoaded', main);
-
-// Function to calculate earthquake statistics
-function calculateEarthquakeStats(earthquakes) {
-  const today = new Date();
-  const turkeyTime = today.toLocaleString('en-US', { timeZone: 'Europe/Istanbul' });
-  const startOfToday = new Date(turkeyTime);
-  startOfToday.setHours(0, 0, 0, 0);
-  
-  const yesterday = new Date(turkeyTime);
-  yesterday.setDate(yesterday.getDate() - 1);
-  yesterday.setHours(0, 0, 0, 0);
-
-  // Filter earthquakes based on date
-  const todayCount = earthquakes.filter(earthquake => isToday(parseDate(earthquake.date), startOfToday)).length;
-  const weekCount = earthquakes.filter(earthquake => parseDate(earthquake.date) >= getStartOfWeek(today)).length;
-  const monthCount = earthquakes.filter(earthquake => parseDate(earthquake.date) >= getStartOfMonth(today)).length;
-  const totalCount = earthquakes.length;
-
-  return { todayCount, weekCount, monthCount, totalCount };
-}
-
-// Helper function to parse date in format 'YYYY.MM.DD'
-function parseDate(dateString) {
-  const parts = dateString.split('.');
-  return new Date(parts[0], parts[1] - 1, parts[2]);
-}
-
-// Helper function to check if a date is today
-function isToday(date, startOfToday) {
-  return date >= startOfToday;
-}
-
-// Helper function to get the start of the week for a given date
-function getStartOfWeek(date) {
-  const startOfWeek = new Date(date);
-  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
-  return new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate());
-}
-
-// Helper function to get the start of the month for a given date
-function getStartOfMonth(date) {
-  return new Date(date.getFullYear(), date.getMonth(), 1);
-}
-
-// Function to display earthquake statistics
-function displayEarthquakeStats(earthquakes) {
-  const { todayCount, weekCount, monthCount, totalCount } = calculateEarthquakeStats(earthquakes);
-
-  document.getElementById('todayCount').textContent = todayCount;
-  document.getElementById('weekCount').textContent = weekCount; // Update the week count
-  document.getElementById('monthCount').textContent = monthCount;
-  document.getElementById('totalCount').textContent = totalCount;
-
-  createMagnitudeChart(earthquakes);
-}
-
-// Function to display the last five earthquakes
-function displayLastFiveEarthquakes(earthquakes) {
-  const lastFiveEarthquakes = earthquakes.slice(0, 5);
-  const quakeList = document.getElementById('quakeList');
-  quakeList.innerHTML = ''; // Clear previous data
-  lastFiveEarthquakes.forEach(earthquake => {
-    const { location, date, time, ml } = earthquake;
-    const magnitude = ml !== undefined ? ml : 'N/A';
-    const quakeItem = document.createElement('div');
-    quakeItem.classList.add('quake-card');
-    quakeItem.innerHTML = `
-      <h3>${location}</h3>
-      <p>Date: ${date}</p>
-      <p>Time: ${time}</p>
-      <p>Magnitude: ${magnitude}</p>
-    `;
-    quakeList.appendChild(quakeItem);
-  });
-}
-
-function createMagnitudeChart(earthquakes) {
-  const counts = { '<2': 0, '2-4': 0, '4-6': 0, '>=6': 0 };
-
-  earthquakes.forEach(earthquake => {
-    const { ml } = earthquake;
-    if (ml < 2) {
-      counts['<2']++;
-    } else if (ml >= 2 && ml < 4) {
-      counts['2-4']++;
-    } else if (ml >= 4 && ml < 6) {
-      counts['4-6']++;
-    } else {
-      counts['>=6']++;
-    }
-  });
-}
 
 main();
