@@ -205,41 +205,41 @@
   background-color: #555;
 }
 
-#magnitudeChart {
+#magnitudeChart canvas {
   max-width: 600px;
   /* margin: 20px auto; */
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  width: 100% !important;
+  height: 100% !important;
 }
 
-/* Styling for the chart canvas */
 .chart-section {
   background: linear-gradient(135deg, #2c2c2c, #212121);
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   margin-bottom: 30px;
   padding: 20px;
-  display: flex;
-  flex-wrap: wrap; /* Allow items to wrap */
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Adjust grid columns for desktop */
+  grid-gap: 20px;
 }
-
-.chart-container {
-  width: 150%;
-  max-width: calc(100% - 400px); /* Adjust maximum width to accommodate space for statistical data */
-  height: 300px; /* Fixed height */
-  margin-bottom: 20px; /* Add some spacing */
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  overflow: hidden; /* Ensure the canvas doesn't overflow */
-  position: relative; /* Required for absolutely positioning the canvas */
-}
-
 
 .stats-grid {
   width: 100%;
-  max-width: 400px; /* Width of the statistical data */
-  margin-left: auto; /* Align statistical data to the right */
+  max-width: 400px;
+  margin: auto; /* Center the statistics grid */
+}
+
+.chart-container {
+  width: 100%;
+  max-width: 600px;
+  height: 400px; /* Increase height of chart container */
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  margin: auto; /* Center the chart container */
+  margin-top: 50px;
 }
 
 .stat-card {
