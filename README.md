@@ -14,6 +14,7 @@ https://eygul.github.io/earthquake/
 - Listing of all earthquakes in the database (in https://eygul.github.io/earthquake/all_quakes.html)
 
   
-Important: Both this website and the API it uses are non-profit and for educational purposes. All of the information this website (and the API it uses) utilizes is the property of the Bogazici University. Please use the information in this website and the API it uses according to the policy of Bogazici at: http://www.koeri.boun.edu.tr/scripts/lst9.asp
+## Important: 
+Both this website and the API it uses are non-profit and for educational purposes. All of the information this website (and the API it uses) utilizes is the property of the Bogazici University. Please use the information in this website and the API it uses according to the policy of Bogazici at: http://www.koeri.boun.edu.tr/scripts/lst9.asp
 
 Veri Kaynağı: Boğaziçi Üniversitesi Kandilli Rasathanesi ve Deprem Araştırma Enstitüsü Bölgesel Deprem-Tsunami İzleme Ve Değerlendirme Merkezi.
